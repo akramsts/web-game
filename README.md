@@ -1,43 +1,50 @@
 # Gree Runner
 
-A slick, endless 2D runner game — built with nothing but HTML, CSS, and vanilla JavaScript. Jump over obstacles, chain "perfect" jumps for bonus points, and chase your high score. Installable as a Progressive Web App (PWA) so it works offline and runs like a native app.
+Gree Runner is a compact endless runner built with vanilla HTML, CSS, and JavaScript. Jump over obstacles, chain perfect clears for bonus points, switch themes, and compete against your local best score. The game supports keyboard, mouse, and touch input, and it works offline as a Progressive Web App.
 
-![Platform](https://img.shields.io/badge/platform-web-blue)
-![PWA](https://img.shields.io/badge/PWA-ready-22c55e)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+## Table of Contents
+
+- [Features](#features)
+- [How to Play](#how-to-play)
+- [Getting Started](#getting-started)
+- [Install as an App](#install-as-an-app)
+- [Project Structure](#project-structure)
+- [Tech Stack](#tech-stack)
+- [Customization](#customization)
+- [License](#license)
 
 ## Features
 
-- **Endless procedural gameplay** — obstacles spawn continuously, and speed ramps up the longer you survive
-- **Perfect jump streaks** — clear an obstacle with enough height for a "perfect" jump, and chain them for multiplying bonus points
-- **Milestone callouts** — fun pop-up messages at score milestones (100, 200, 500, 800, 1200+)
-- **Persistent high score** — saved locally in your browser, no account needed
-- **3 built-in themes** — Obsidian, Amber, and Platinum, saved to your preferences
-- **Retro sound effects** — procedurally generated with the Web Audio API (jump, perfect, background beat), fully mutable
-- **Pause / resume support**
-- **Keyboard, mouse, and touch controls** — playable on desktop and mobile
-- **Installable PWA** — add it to your home screen and play offline via service worker caching
+- Endless 2D runner gameplay with smooth acceleration
+- Perfect jump streaks for extra bonus points
+- Milestone notifications at 100, 200, 500, 800, and 1200 points
+- Persistent high score, theme, and sound settings via `localStorage`
+- Three built-in themes: Obsidian, Amber, and Platinum
+- Synthesized retro sound effects using the Web Audio API
+- Pause/resume controls for easier gameplay
+- Keyboard, mouse, and touch controls for desktop and mobile
+- Offline support through service worker caching
 
 ## How to Play
 
-Avoid the incoming obstacles for as long as you can. Your score climbs automatically over time, and jumping cleanly over an obstacle at height builds a **perfect streak** for bonus points.
+Avoid obstacles while keeping your run alive. Your score increases automatically over time, and clean jumps can earn you more points.
 
-| Action | Control |
-|---|---|
-| Jump | `Space`, `↑`, click, or tap |
-| Pause / Resume | `P` |
-| Mute / Unmute Sound | `M` |
-| Start / Restart | `Enter` or the on-screen button |
+**Controls**
+
+- Jump: `Space`, `↑`, click, or tap
+- Pause / Resume: `P`
+- Mute / Unmute Sound: `M`
+- Start / Restart: `Enter` or the on-screen button
 
 ## Getting Started
 
-No build tools, no dependencies, no installation required.
+No build tools or external dependencies are required.
 
 ### Option 1: Open directly
-Just open `index.html` in any modern browser.
+Open `index.html` in a modern browser.
 
-### Option 2: Serve locally (recommended, needed for full PWA behavior)
-Service workers require a proper origin (not `file://`), so serve the folder with any static server:
+### Option 2: Serve locally (recommended)
+For full PWA behavior, run a local web server instead of opening the file directly.
 
 ```bash
 # Using Python
@@ -47,40 +54,41 @@ python3 -m http.server 8000
 npx serve .
 ```
 
-Then visit `http://localhost:8000` in your browser.
+Then visit `http://localhost:8000`.
 
-### Installing as an app
-Once served over `http://localhost` or `https://`, most browsers will offer an **Install** / **Add to Home Screen** prompt — accept it to run Gree Runner as a standalone app with offline support.
+## Install as an App
+When served from `http://localhost` or `https://`, supported browsers may prompt to install the game. Install it to play in standalone mode with offline support.
 
 ## Project Structure
 
 ```
 .
-├── index.html       # Game markup, styles, and all game logic
-├── manifest.json     # PWA manifest (name, icons, theme colors)
-├── sw.js             # Service worker — caches assets for offline play
-├── icon-192.png       # App icon (192x192)
-└── icon-512.png       # App icon (512x512)
+├── index.html     # Game UI, styling, and logic
+├── manifest.json  # PWA manifest metadata and icons
+├── sw.js          # Service worker for offline caching
+├── icon-192.png   # PWA icon (192x192)
+└── icon-512.png   # PWA icon (512x512)
 ```
 
 ## Tech Stack
 
-- **HTML5 / CSS3** — layout, theming via CSS custom properties, and animation
-- **Vanilla JavaScript** — game loop driven by `requestAnimationFrame`, no frameworks or libraries
-- **Web Audio API** — synthesized sound effects, no audio files
-- **`localStorage`** — persists high score, selected theme, and sound preference
-- **Service Worker + Web App Manifest** — offline caching and installability
+- HTML5 / CSS3 for gameplay UI and responsive styling
+- Vanilla JavaScript for the game loop and mechanics
+- Web Audio API for synth sound effects
+- `localStorage` for best score, theme, and audio settings
+- Service Worker + Web App Manifest for offline PWA support
 
 ## Customization
 
-- **Themes**: edit the `THEMES` object in `index.html` to add or tweak color palettes.
-- **Difficulty**: tune `GRAVITY`, `BASE_SPEED`, `MAX_EXTRA_SPEED`, and obstacle spawn logic near the top of the game script.
-- **Icons / branding**: swap `icon-192.png` and `icon-512.png`, and update `manifest.json` accordingly.
+- Themes: edit the `THEMES` object in `index.html`
+- Difficulty: adjust `GRAVITY`, `BASE_SPEED`, and `MAX_EXTRA_SPEED`
+- Obstacle timing: change the spawn timing logic in `spawnNewObstacle()`
+- Branding: replace `icon-192.png`, `icon-512.png`, and update `manifest.json`
 
 ## License
 
-MIT — feel free to fork, modify, and use this project however you'd like.
+MIT
 
 ---
 
-Can you beat the high score?
+Enjoy the run and try to beat your high score!

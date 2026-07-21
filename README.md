@@ -71,3 +71,7 @@ Once served over `http` or `https`, most browsers will offer an "Install" or "Ad
 ## License
 
 This project is open source. Feel free to fork it, modify it, and make it your own.
+
+## Author
+
+Made by **Akram**

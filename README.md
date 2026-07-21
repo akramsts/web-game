@@ -1,94 +1,73 @@
 # Gree Runner
 
-Gree Runner is a compact endless runner built with vanilla HTML, CSS, and JavaScript. Jump over obstacles, chain perfect clears for bonus points, switch themes, and compete against your local best score. The game supports keyboard, mouse, and touch input, and it works offline as a Progressive Web App.
+An endless 2D running game built with plain HTML, CSS, and JavaScript. Jump over obstacles, chain perfect jumps for bonus points, and try to beat your high score. Installable as a PWA so it can be played offline like a native app.
 
-## Table of Contents
+## Play
 
-- [Features](#features)
-- [How to Play](#how-to-play)
-- [Getting Started](#getting-started)
-- [Install as an App](#install-as-an-app)
-- [Project Structure](#project-structure)
-- [Tech Stack](#tech-stack)
-- [Customization](#customization)
-- [License](#license)
+**Live demo:** [akramsts.github.io/web-game](https://akramsts.github.io/web-game/)
+
+You can also open `index.html` directly in any modern browser to play locally.
 
 ## Features
 
-- Endless 2D runner gameplay with smooth acceleration
-- Perfect jump streaks for extra bonus points
-- Milestone notifications at 100, 200, 500, 800, and 1200 points
-- Persistent high score, theme, and sound settings via `localStorage`
-- Three built-in themes: Obsidian, Amber, and Platinum
-- Synthesized retro sound effects using the Web Audio API
-- Pause/resume controls for easier gameplay
-- Keyboard, mouse, and touch controls for desktop and mobile
-- Offline support through service worker caching
+- Endless runner gameplay with procedurally spawned obstacles (four types: normal, short, fat, tall)
+- Increasing difficulty: game speed ramps up as your score grows
+- Perfect jump streak system that rewards well-timed high jumps with bonus points
+- Score milestones with on-screen callouts at 100, 200, 500, 800, and 1200 points
+- Persistent high score, saved locally in the browser
+- Three visual themes: Obsidian, Amber, and Platinum
+- Procedural sound effects and background music generated with the Web Audio API, with a mute toggle
+- Pause and resume at any time
+- Fully responsive layout with touch, mouse, and keyboard controls
+- Installable Progressive Web App (PWA) with offline support via a service worker
 
-## How to Play
+## Controls
 
-Avoid obstacles while keeping your run alive. Your score increases automatically over time, and clean jumps can earn you more points.
+| Action | Input |
+|---|---|
+| Jump | `Space`, `Arrow Up`, tap, or click |
+| Pause / Resume | `P` |
+| Mute / Unmute sound | `M` |
+| Restart | `Enter` |
 
-**Controls**
+## Tech Stack
 
-- Jump: `Space`, `↑`, click, or tap
-- Pause / Resume: `P`
-- Mute / Unmute Sound: `M`
-- Start / Restart: `Enter` or the on-screen button
-
-## Getting Started
-
-No build tools or external dependencies are required.
-
-### Option 1: Open directly
-Open `index.html` in a modern browser.
-
-### Option 2: Serve locally (recommended)
-For full PWA behavior, run a local web server instead of opening the file directly.
-
-```bash
-# Using Python
-python3 -m http.server 8000
-
-# Using Node
-npx serve .
-```
-
-Then visit `http://localhost:8000`.
-
-## Install as an App
-When served from `http://localhost` or `https://`, supported browsers may prompt to install the game. Install it to play in standalone mode with offline support.
+- HTML5, CSS3, vanilla JavaScript (no frameworks or build step)
+- Web Audio API for sound generation
+- Service Worker + Web App Manifest for PWA/offline support
 
 ## Project Structure
 
 ```
 .
-├── index.html     # Game UI, styling, and logic
-├── manifest.json  # PWA manifest metadata and icons
-├── sw.js          # Service worker for offline caching
-├── icon-192.png   # PWA icon (192x192)
-└── icon-512.png   # PWA icon (512x512)
+├── index.html       # Game markup, styles, and logic
+├── manifest.json     # PWA manifest (name, icons, theme)
+├── sw.js              # Service worker for offline caching
+├── icon-192.png     # App icon (192x192)
+└── icon-512.png     # App icon (512x512)
 ```
 
-## Tech Stack
+## Running Locally
 
-- HTML5 / CSS3 for gameplay UI and responsive styling
-- Vanilla JavaScript for the game loop and mechanics
-- Web Audio API for synth sound effects
-- `localStorage` for best score, theme, and audio settings
-- Service Worker + Web App Manifest for offline PWA support
+No build tools or dependencies are required.
 
-## Customization
+```bash
+git clone https://github.com/akramsts/web-game.git
+cd web-game
+```
 
-- Themes: edit the `THEMES` object in `index.html`
-- Difficulty: adjust `GRAVITY`, `BASE_SPEED`, and `MAX_EXTRA_SPEED`
-- Obstacle timing: change the spawn timing logic in `spawnNewObstacle()`
-- Branding: replace `icon-192.png`, `icon-512.png`, and update `manifest.json`
+Then simply open `index.html` in your browser. For full PWA/service worker behavior (which requires a proper origin rather than the `file://` protocol), serve the folder locally, for example:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit `http://localhost:8000` in your browser.
+
+## Installing as an App
+
+Once served over `http` or `https`, most browsers will offer an "Install" or "Add to Home Screen" option, letting you play Gree Runner as a standalone app, online or off.
 
 ## License
 
-MIT
-
----
-
-Enjoy the run and try to beat your high score!
+This project is open source. Feel free to fork it, modify it, and make it your own.

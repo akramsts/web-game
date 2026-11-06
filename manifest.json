@@ -1,11 +1,13 @@
 {
   "name": "Gree Runner",
   "short_name": "GreeRunner",
+  "description": "An endless 2D running game. Jump over obstacles and beat your high score.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#020617",
   "theme_color": "#22c55e",
-  "orientation": "any",
   "icons": [
     {
       "src": "icon-192.png",

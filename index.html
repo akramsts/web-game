@@ -6,15 +6,15 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="description"
-        content="Play Gree Runner - An endless 2D running game. Jump, dodge obstacles, and beat your high score!">
+        content="Play Gree Runner, an endless 2D running game. Jump, dodge obstacles, and beat your high score!">
+    <meta name="theme-color" content="#22c55e">
     <meta property="og:title" content="Gree Runner">
-    <meta property="og:description" content="Endless 2D Runner Game. Can you beat my high score?">
+    <meta property="og:description" content="An endless 2D runner game. Can you beat my high score?">
     <meta property="og:type" content="website">
 
     <link rel="icon" href="icon-192.png" type="image/png">
-
+    <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#22c55e">
 
     <title>Gree Runner</title>
     <style>
@@ -46,9 +46,9 @@
             outline-offset: 2px;
         }
 
-
         body {
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -97,14 +97,14 @@
             text-align: right;
         }
 
-        .scores span.value {
+        .scores .label {
+            color: #9ca3af;
+        }
+
+        .scores .value {
             font-weight: 600;
             color: var(--accent-soft);
             display: inline-block;
-        }
-
-        .scores .label {
-            color: #9ca3af;
         }
 
         .game {
@@ -118,9 +118,12 @@
             background: linear-gradient(to top, var(--bg-bottom) 0%, var(--bg-top) 60%);
             overflow: hidden;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(148, 163, 184, 0.06);
-            transition: border-color 0.3s ease-out, box-shadow 0.3s ease-out, background 0.3s ease-out, outline-color 0.3s ease-out;
             outline: 2px solid var(--accent-soft);
-            outline-offset: 0px;
+            outline-offset: 0;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: border-color 0.3s ease-out, box-shadow 0.3s ease-out, background 0.3s ease-out, outline-color 0.3s ease-out;
         }
 
         .sky-glow {
@@ -166,42 +169,38 @@
         .cloud-1 {
             left: 20%;
             opacity: 0.9;
-            animation: cloudDrift1 22s ease-in-out infinite;
+            animation: cloudDriftLeft 22s ease-in-out infinite;
         }
 
         .cloud-2 {
             left: 65%;
             top: 40px;
             opacity: 0.7;
-            animation: cloudDrift2 30s ease-in-out infinite;
+            animation: cloudDriftRight 30s ease-in-out infinite;
             animation-delay: -6s;
         }
 
-        @keyframes cloudDrift1 {
-            0% {
+        @keyframes cloudDriftLeft {
+
+            0%,
+            100% {
                 transform: translateX(0);
             }
 
             50% {
                 transform: translateX(-18px);
             }
-
-            100% {
-                transform: translateX(0);
-            }
         }
 
-        @keyframes cloudDrift2 {
-            0% {
+        @keyframes cloudDriftRight {
+
+            0%,
+            100% {
                 transform: scale(0.9) translateX(0);
             }
 
             50% {
                 transform: scale(0.9) translateX(16px);
-            }
-
-            100% {
-                transform: scale(0.9) translateX(0);
             }
         }
 
@@ -226,29 +225,59 @@
             bottom: 36px;
             width: 40px;
             height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9);
             will-change: transform;
         }
 
         .runner {
+            position: relative;
             width: 100%;
             height: 100%;
             border-radius: 8px;
             background: linear-gradient(to bottom, var(--accent-soft), var(--accent), var(--accent-strong));
-            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.9), 0 10px 20px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.9);
             transform-origin: center center;
-            transition: background 0.3s ease-out;
             will-change: transform;
+            transition: background 0.3s ease-out;
         }
 
         .runner::after {
             content: "";
             position: absolute;
+            top: 9px;
+            left: 10px;
             width: 8px;
             height: 8px;
             border-radius: 50%;
             background: rgba(15, 23, 42, 0.85);
-            top: 9px;
-            left: 10px;
+        }
+
+        .obstacle {
+            position: absolute;
+            left: 0;
+            bottom: 36px;
+            width: 26px;
+            height: 58px;
+            border-radius: 8px 8px 4px 4px;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.9);
+            will-change: transform;
+        }
+
+        .obstacle.normal {
+            background: linear-gradient(to bottom, #facc15, #eab308, #a16207);
+        }
+
+        .obstacle.tall {
+            background: linear-gradient(to bottom, #f97316, #ea580c, #9a3412);
+        }
+
+        .obstacle.fat {
+            background: linear-gradient(to bottom, #38bdf8, #0ea5e9, #0369a1);
+        }
+
+        .obstacle.short {
+            background: linear-gradient(to bottom, #a855f7, #7c3aed, #5b21b6);
         }
 
         .dust {
@@ -278,343 +307,44 @@
             }
         }
 
-        .obstacle {
-            position: absolute;
-            left: 0;
-            bottom: 36px;
-            width: 26px;
-            height: 58px;
-            border-radius: 8px 8px 4px 4px;
-            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.9);
-            will-change: transform;
-            transition: background 0.3s ease-out;
-        }
-
-        .obstacle.normal {
-            background: linear-gradient(to bottom, #facc15, #eab308, #a16207);
-        }
-
-        .obstacle.tall {
-            background: linear-gradient(to bottom, #f97316, #ea580c, #9a3412);
-        }
-
-        .obstacle.fat {
-            background: linear-gradient(to bottom, #38bdf8, #0ea5e9, #0369a1);
-        }
-
-        .obstacle.short {
-            background: linear-gradient(to bottom, #a855f7, #7c3aed, #5b21b6);
-        }
-
-        .overlay {
+        .countdown {
             position: absolute;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            pointer-events: none;
-            visibility: visible;
-            transition: opacity 0.3s ease, visibility 0s linear 0s;
-        }
-
-        .overlay-inner {
-            pointer-events: auto;
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
-            border-radius: 16px;
-            padding: 16px 18px;
-            max-width: 80%;
-            text-align: center;
-            border: 1px solid rgba(148, 163, 184, 0.35);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.95);
-            transform: scale(1) translateZ(0);
-            backface-visibility: hidden;
-            will-change: transform, opacity;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-        }
-
-        .overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
-        }
-
-        .overlay.hidden .overlay-inner {
-            pointer-events: none;
-            transform: scale(0.92) translateZ(0);
-        }
-
-        .overlay-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: #e5e7eb;
-        }
-
-        .overlay-sub {
-            font-size: 13px;
-            color: #9ca3af;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-
-        .overlay-btn {
-            position: relative;
-            border: none;
-            outline: none;
-            padding: 9px 24px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--accent-soft), var(--accent), var(--accent-strong));
-            color: #01210e;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(22, 163, 74, 0.5);
-            transition: filter 0.2s ease-out, box-shadow 0.2s ease-out, background 0.3s ease-out;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .overlay-btn:hover {
-                filter: brightness(1.1) saturate(1.1);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(34, 197, 94, 0.85), 0 0 14px rgba(74, 222, 128, 0.4);
-            }
-        }
-
-        .overlay-btn:active {
-            filter: brightness(0.95);
-            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.35), 0 4px 10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(22, 163, 74, 0.6);
-        }
-
-        .footer {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #9ca3af;
-            padding: 0 16px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .footer.hide-footer {
-            opacity: 0;
-            transform: translateY(-16px);
-            pointer-events: none;
-        }
-
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .footer-right {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .theme-buttons {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .theme-btn {
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            background: rgba(15, 23, 42, 0.8);
-            color: #9ca3af;
-            padding: 4px 12px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: background 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .theme-btn:hover {
-                color: #e5e7eb;
-                border-color: rgba(148, 163, 184, 0.7);
-            }
-        }
-
-        .theme-btn.active {
-            border-color: var(--accent-soft);
+            font-size: 72px;
+            font-weight: 800;
             color: var(--accent-soft);
-            background: var(--theme-btn-bg);
-        }
-
-        .settings-toggle {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            color: #9ca3af;
-            padding: 6px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s ease, border-color 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .settings-toggle:hover {
-                color: #e5e7eb;
-                border-color: rgba(148, 163, 184, 0.6);
-                transform: rotate(30deg);
-            }
-        }
-
-        .settings-popup {
-            position: absolute;
-            bottom: 40px;
-            right: 0;
-            background: radial-gradient(circle at top, #0f172a, #020617);
-            border: 1px solid #1f2937;
-            border-radius: 12px;
-            padding: 12px;
-            width: 220px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: bottom right;
-        }
-
-        .settings-popup.hidden {
+            text-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
             opacity: 0;
-            transform: translateY(10px) scale(0.95);
             pointer-events: none;
         }
 
-        .popup-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: #e5e7eb;
-            padding: 4px 0;
+        .countdown.show {
+            animation: countdownPop 0.8s ease-out forwards;
         }
 
-        .popup-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            background: rgba(15, 23, 42, 0.9);
-            color: var(--accent-soft);
-            width: 38px;
-            height: 22px;
-            padding: 0;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .popup-btn:hover {
-                border-color: var(--accent-soft);
+        @keyframes countdownPop {
+            0% {
+                transform: scale(1.5);
+                opacity: 0;
             }
-        }
 
-        .arrow-btn {
-            color: #9ca3af;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .arrow-btn:hover {
-                border-color: var(--accent-soft);
+            25% {
+                transform: scale(1);
+                opacity: 1;
             }
-        }
 
-        .shortcuts-arrow {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-        }
+            80% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
 
-        .shortcuts-arrow.open {
-            transform: rotate(180deg);
-            color: var(--accent-soft);
-        }
-
-        .switch-btn {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .switch-thumb {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #9ca3af;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s ease;
-        }
-
-        .switch-btn.on .switch-thumb {
-            transform: translateX(16px);
-            background: var(--accent-soft);
-        }
-
-        .popup-divider {
-            height: 1px;
-            background: #1f2937;
-            margin: 2px 0;
-        }
-
-        .shortcuts-header {
-            user-select: none;
-        }
-
-        .shortcuts-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            overflow: hidden;
-            max-height: 0;
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .shortcuts-list.open {
-            max-height: 200px;
-            opacity: 1;
-            margin-top: 8px;
-            padding-bottom: 4px;
-        }
-
-        .shortcut-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #9ca3af;
-        }
-
-        .sc-keys {
-            display: flex;
-            gap: 4px;
-        }
-
-        .sc-key {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: 4px;
-            padding: 2px 6px;
-            font-size: 10px;
-            color: #e5e7eb;
-            font-family: inherit;
+            100% {
+                transform: scale(0.9);
+                opacity: 0.2;
+            }
         }
 
         .milestone {
@@ -658,19 +388,309 @@
             }
         }
 
+        .overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay-inner {
+            pointer-events: auto;
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+            border-radius: 16px;
+            padding: 16px 18px;
+            max-width: 80%;
+            text-align: center;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.95);
+            transform: scale(1) translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform, opacity;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+
+        .overlay.hidden .overlay-inner {
+            pointer-events: none;
+            transform: scale(0.92) translateZ(0);
+        }
+
+        .overlay-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #e5e7eb;
+        }
+
+        .overlay-sub {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .overlay-sub .highlight {
+            color: var(--accent);
+        }
+
+        .overlay-btn {
+            border: none;
+            padding: 9px 24px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent), var(--accent-strong));
+            color: #01210e;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(22, 163, 74, 0.5);
+            transition: filter 0.2s ease-out, box-shadow 0.2s ease-out, background 0.3s ease-out;
+        }
+
+        .overlay-btn:active {
+            filter: brightness(0.95);
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.35), 0 4px 10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(22, 163, 74, 0.6);
+        }
+
+        .footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px;
+            font-size: 12px;
+            color: #9ca3af;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+
+        .footer.hide-footer {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-16px);
+            pointer-events: none;
+        }
+
+        .footer-right {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: rgba(15, 23, 42, 0.8);
+            color: #9ca3af;
+            padding: 4px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out;
+        }
+
+        .theme-btn.active {
+            border-color: var(--accent-soft);
+            color: var(--accent-soft);
+            background: var(--theme-btn-bg);
+        }
+
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: rgba(15, 23, 42, 0.8);
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s ease, border-color 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .settings-popup {
+            position: absolute;
+            bottom: 40px;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 220px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #1f2937;
+            background: radial-gradient(circle at top, #0f172a, #020617);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95);
+            transform-origin: bottom right;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .settings-popup.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.3s;
+        }
+
+        .popup-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 13px;
+            color: #e5e7eb;
+        }
+
+        .popup-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 22px;
+            padding: 0;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--accent-soft);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .arrow-btn {
+            color: #9ca3af;
+        }
+
+        .shortcuts-arrow {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+        }
+
+        .shortcuts-arrow.open {
+            transform: rotate(180deg);
+            color: var(--accent-soft);
+        }
+
+        .switch-btn {
+            position: relative;
+        }
+
+        .switch-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #9ca3af;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s ease;
+        }
+
+        .switch-btn.on .switch-thumb {
+            transform: translateX(16px);
+            background: var(--accent-soft);
+        }
+
+        .popup-divider {
+            height: 1px;
+            margin: 2px 0;
+            background: #1f2937;
+        }
+
+        .shortcuts-header {
+            user-select: none;
+        }
+
+        .shortcuts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .shortcuts-list.open {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 8px;
+            padding-bottom: 4px;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .sc-keys {
+            display: flex;
+            gap: 4px;
+        }
+
+        .sc-key {
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+            color: #e5e7eb;
+            font-size: 10px;
+            font-family: inherit;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .overlay-btn:hover {
+                filter: brightness(1.1) saturate(1.1);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(34, 197, 94, 0.85), 0 0 14px rgba(74, 222, 128, 0.4);
+            }
+
+            .theme-btn:hover {
+                color: #e5e7eb;
+                border-color: rgba(148, 163, 184, 0.7);
+            }
+
+            .settings-toggle:hover {
+                color: #e5e7eb;
+                border-color: rgba(148, 163, 184, 0.6);
+                transform: rotate(30deg);
+            }
+
+            .popup-btn:hover {
+                border-color: var(--accent-soft);
+            }
+        }
+
         @media (max-width: 540px) {
             .logo-main {
                 font-size: 18px;
             }
 
-            .overlay-inner {
-                max-width: 92%;
-                padding: 14px 14px;
-            }
-
             .hud,
             .footer {
                 padding: 0 10px;
+            }
+
+            .overlay-inner {
+                max-width: 92%;
+                padding: 14px;
             }
 
             .settings-popup {
@@ -688,17 +708,15 @@
                 <span class="logo-pill">Endless 2D</span>
             </div>
             <div class="scores">
-                <div>
-                    <span class="label">Score:</span>
-                    <span id="score" class="value">0</span>
-                    &nbsp;|&nbsp;
-                    <span class="label">Best:</span>
-                    <span id="bestScore" class="value">0</span>
-                </div>
+                <span class="label">Score:</span>
+                <span id="score" class="value">0</span>
+                &nbsp;|&nbsp;
+                <span class="label">Best:</span>
+                <span id="bestScore" class="value">0</span>
             </div>
         </header>
 
-        <main class="game" id="gameArea" tabindex="0">
+        <main class="game" id="gameArea" tabindex="0" aria-label="Game area">
             <div class="sky-glow"></div>
             <div class="cloud cloud-1"></div>
             <div class="cloud cloud-2"></div>
@@ -713,10 +731,11 @@
             <div class="dust" id="dust"></div>
 
             <div class="milestone" id="milestone"></div>
+            <div class="countdown" id="countdown" aria-live="assertive"></div>
 
             <div class="overlay" id="overlay">
                 <div class="overlay-inner">
-                    <div class="overlay-title" id="overlayTitle">Gree Runner</div>
+                    <div class="overlay-title" id="overlayTitle"></div>
                     <div class="overlay-sub" id="overlaySub"></div>
                     <button class="overlay-btn" id="playButton" type="button"></button>
                 </div>
@@ -724,18 +743,16 @@
         </main>
 
         <footer class="footer" id="appFooter">
-            <div class="footer-left">
-                <div class="theme-buttons">
-                    <button class="theme-btn" data-theme="obsidian">Obsidian</button>
-                    <button class="theme-btn" data-theme="amber">Amber</button>
-                    <button class="theme-btn" data-theme="platinum">Platinum</button>
-                </div>
+            <div class="theme-buttons">
+                <button class="theme-btn" type="button" data-theme="obsidian">Obsidian</button>
+                <button class="theme-btn" type="button" data-theme="amber">Amber</button>
+                <button class="theme-btn" type="button" data-theme="platinum">Platinum</button>
             </div>
 
             <div class="footer-right">
-                <button class="settings-toggle" id="settingsToggle" aria-label="Settings">
+                <button class="settings-toggle" id="settingsToggle" type="button" aria-label="Settings">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path
                             d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
@@ -745,8 +762,8 @@
 
                 <div class="settings-popup hidden" id="settingsPopup">
                     <div class="popup-row">
-                        <span>Sounds</span>
-                        <button class="popup-btn switch-btn" id="popupSoundBtn" type="button" role="switch"
+                        <span>Sound</span>
+                        <button class="popup-btn switch-btn" id="soundSwitch" type="button" role="switch"
                             aria-checked="true" aria-label="Toggle sound">
                             <span class="switch-thumb"></span>
                         </button>
@@ -757,10 +774,11 @@
                     <div>
                         <div class="popup-row shortcuts-header">
                             <span>Shortcuts</span>
-                            <button class="popup-btn arrow-btn" id="shortcutsToggleBtn">
+                            <button class="popup-btn arrow-btn" id="shortcutsToggleBtn" type="button"
+                                aria-label="Show shortcuts" aria-expanded="false" aria-controls="shortcutsList">
                                 <svg class="shortcuts-arrow" id="shortcutsArrow" width="14" height="14"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
+                                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </button>
@@ -768,7 +786,9 @@
                         <div class="shortcuts-list" id="shortcutsList">
                             <div class="shortcut-item">
                                 <span>Jump</span>
-                                <div class="sc-keys"><span class="sc-key">Space</span><span class="sc-key">↑</span>
+                                <div class="sc-keys">
+                                    <span class="sc-key">Space</span>
+                                    <span class="sc-key">↑</span>
                                 </div>
                             </div>
                             <div class="shortcut-item">
@@ -776,11 +796,11 @@
                                 <span class="sc-key">P</span>
                             </div>
                             <div class="shortcut-item">
-                                <span>Mute Sound</span>
+                                <span>Mute / Unmute</span>
                                 <span class="sc-key">M</span>
                             </div>
                             <div class="shortcut-item">
-                                <span>Restart</span>
+                                <span>Start / Restart</span>
                                 <span class="sc-key">Enter</span>
                             </div>
                         </div>
@@ -791,29 +811,36 @@
     </div>
 
     <script>
-        const gameArea = document.getElementById('gameArea');
-        const runnerWrap = document.getElementById('runnerWrap');
-        const runnerEl = document.getElementById('runner');
-        const obstacleEl = document.getElementById('obstacle');
-        const scoreEl = document.getElementById('score');
-        const bestScoreEl = document.getElementById('bestScore');
-        const overlay = document.getElementById('overlay');
-        const overlayTitle = document.getElementById('overlayTitle');
-        const overlaySub = document.getElementById('overlaySub');
-        const playButton = document.getElementById('playButton');
-        const themeButtons = document.querySelectorAll('.theme-btn');
-        const soundLabelBtn = document.getElementById('popupSoundBtn');
-        const settingsToggle = document.getElementById('settingsToggle');
-        const settingsPopup = document.getElementById('settingsPopup');
-        const appFooter = document.getElementById('appFooter');
+        const GROUND_Y = 36;
+        const RUNNER_SIZE = 40;
+        const RUNNER_X = 80;
+        const GROUND_PERIOD = 48;
+        const DEFAULT_GAME_WIDTH = 660;
 
-        const shortcutsToggleBtn = document.getElementById('shortcutsToggleBtn');
-        const shortcutsArrow = document.getElementById('shortcutsArrow');
-        const shortcutsList = document.getElementById('shortcutsList');
+        const GRAVITY = 2200;
+        const JUMP_VELOCITY = 700;
+        const MAX_JUMPS = 1;
+        const SPIN_SPEED = 360 / ((2 * JUMP_VELOCITY) / GRAVITY);
+        const BASE_SPEED = 320;
+        const SPEED_RAMP = 50;
+        const SCORE_TICK = 0.2;
+        const COUNTDOWN_STEP_MS = 800;
+        const MAX_STEP = 1 / 120;
 
-        const groundEl = document.getElementById('ground');
-        const dustEl = document.getElementById('dust');
-        const milestoneEl = document.getElementById('milestone');
+        const OBSTACLE_TYPES = [
+            { w: 26, h: 58, className: 'normal' },
+            { w: 22, h: 46, className: 'short' },
+            { w: 30, h: 52, className: 'fat' },
+            { w: 24, h: 72, className: 'tall' }
+        ];
+
+        const MILESTONES = [
+            { score: 100, text: 'Nice warm-up!' },
+            { score: 200, text: 'Getting in the flow!' },
+            { score: 500, text: "You're on fire!" },
+            { score: 800, text: 'Unstoppable!' },
+            { score: 1200, text: 'Legend!' }
+        ];
 
         const THEMES = {
             obsidian: {
@@ -851,7 +878,93 @@
             }
         };
 
+        const STORAGE_KEYS = {
+            theme: 'gree_runner_theme',
+            sound: 'gree_runner_sound',
+            best: 'gree_runner_pro_best'
+        };
+
+        const BG_PATTERN = [330, 392, 440, 0, 330, 392, 523, 0];
+
+        const gameArea = document.getElementById('gameArea');
+        const groundEl = document.getElementById('ground');
+        const runnerWrap = document.getElementById('runnerWrap');
+        const runnerEl = document.getElementById('runner');
+        const obstacleEl = document.getElementById('obstacle');
+        const dustEl = document.getElementById('dust');
+        const milestoneEl = document.getElementById('milestone');
+        const countdownEl = document.getElementById('countdown');
+        const scoreEl = document.getElementById('score');
+        const bestScoreEl = document.getElementById('bestScore');
+        const overlay = document.getElementById('overlay');
+        const overlayTitle = document.getElementById('overlayTitle');
+        const overlaySub = document.getElementById('overlaySub');
+        const playButton = document.getElementById('playButton');
+        const appFooter = document.getElementById('appFooter');
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const settingsToggle = document.getElementById('settingsToggle');
+        const settingsPopup = document.getElementById('settingsPopup');
+        const soundSwitch = document.getElementById('soundSwitch');
+        const shortcutsToggleBtn = document.getElementById('shortcutsToggleBtn');
+        const shortcutsArrow = document.getElementById('shortcutsArrow');
+        const shortcutsList = document.getElementById('shortcutsList');
+
+        let state = 'menu';
+        let gameWidth = DEFAULT_GAME_WIDTH;
+        let lastTimestamp = null;
+        let countdownTimer = null;
+
+        let score = 0;
+        let bestScore = 0;
+        let scoreTimer = 0;
+        let lastRenderedScore = -1;
+        let nextMilestone = 0;
+        let speed = BASE_SPEED;
+
+        let runnerY = GROUND_Y;
+        let runnerVy = 0;
+        let runnerAngle = 0;
+        let jumpCount = 0;
+        let wasOnGround = true;
+        let squashAmount = 0;
+        let squashDir = 1;
+        let groundX = 0;
+
+        let obstacleX = -1000;
+        let obstacleWidth = 26;
+        let obstacleHeight = 58;
+
         let currentTheme = 'obsidian';
+        let soundOn = true;
+        let audioCtx = null;
+        let bgInterval = null;
+        let bgStep = 0;
+
+        function readStorage(key) {
+            try { return localStorage.getItem(key); } catch (e) { return null; }
+        }
+
+        function writeStorage(key, value) {
+            try { localStorage.setItem(key, value); } catch (e) { }
+        }
+
+        function restartAnimation(el, className) {
+            el.classList.remove(className);
+            void el.offsetWidth;
+            el.classList.add(className);
+        }
+
+        function loadSettings() {
+            const storedTheme = readStorage(STORAGE_KEYS.theme);
+            if (storedTheme && THEMES[storedTheme]) currentTheme = storedTheme;
+            applyTheme(currentTheme);
+
+            if (readStorage(STORAGE_KEYS.sound) === '0') soundOn = false;
+            updateSoundSwitch();
+
+            bestScore = parseInt(readStorage(STORAGE_KEYS.best), 10) || 0;
+            bestScoreEl.textContent = bestScore;
+        }
 
         function applyTheme(name) {
             const theme = THEMES[name] || THEMES.obsidian;
@@ -860,167 +973,127 @@
             Object.entries(theme).forEach(([key, value]) => {
                 document.documentElement.style.setProperty(key, value);
             });
-
-            themeButtons.forEach(btn => {
+            themeButtons.forEach((btn) => {
                 btn.classList.toggle('active', btn.dataset.theme === name);
             });
-
-            try { localStorage.setItem('gree_runner_theme', name); } catch (e) { }
+            writeStorage(STORAGE_KEYS.theme, name);
         }
-
-        let audioCtx = null;
-        let soundOn = true;
-        let bgInterval = null;
-        let bgStep = 0;
 
         function initAudio() {
             if (!audioCtx) {
-                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-                catch (e) { soundOn = false; updateSoundLabel(); return; }
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    soundOn = false;
+                    updateSoundSwitch();
+                    return;
+                }
             }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume().catch(() => { });
-            }
+            if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => { });
         }
 
-        function updateSoundLabel() {
-            soundLabelBtn.classList.toggle('on', soundOn);
-            soundLabelBtn.setAttribute('aria-checked', soundOn ? 'true' : 'false');
-            try { localStorage.setItem('gree_runner_sound', soundOn ? '1' : '0'); } catch (e) { }
+        function updateSoundSwitch() {
+            soundSwitch.classList.toggle('on', soundOn);
+            soundSwitch.setAttribute('aria-checked', String(soundOn));
         }
 
-        function playBeep(freq = 440, duration = 120, volume = 0.25, type = 'square') {
+        function toggleSound() {
+            soundOn = !soundOn;
+            if (soundOn) {
+                initAudio();
+                if (soundOn && state === 'playing') startBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+            writeStorage(STORAGE_KEYS.sound, soundOn ? '1' : '0');
+            updateSoundSwitch();
+        }
+
+        function playBeep(freq, duration, volume, type) {
             if (!soundOn || !audioCtx) return;
-            if (audioCtx.state === 'suspended') { audioCtx.resume().catch(() => { }); }
+            if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => { });
+
+            const now = audioCtx.currentTime;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.0, audioCtx.currentTime + duration / 1000);
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(volume, now);
+            gain.gain.linearRampToValueAtTime(0, now + duration / 1000);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + duration / 1000);
+            osc.stop(now + duration / 1000);
         }
 
         function playJumpSound() { playBeep(720, 80, 0.18, 'square'); }
-        function playPerfectSound() {
-            playBeep(520, 90, 0.18, 'triangle');
-            setTimeout(() => playBeep(820, 90, 0.14, 'triangle'), 80);
-        }
         function playGameOverSound() { playBeep(260, 220, 0.22, 'sawtooth'); }
         function playPauseSound() { playBeep(420, 80, 0.16, 'square'); }
-
-        const bgPattern = [330, 392, 440, 0, 330, 392, 523, 0];
 
         function startBackgroundMusic() {
             if (!soundOn) return;
             initAudio();
             if (!audioCtx || bgInterval) return;
             bgInterval = setInterval(() => {
-                if (!soundOn || !audioCtx) return;
-                const freq = bgPattern[bgStep % bgPattern.length];
+                const freq = BG_PATTERN[bgStep % BG_PATTERN.length];
                 bgStep++;
                 if (freq) playBeep(freq, 200, 0.12, 'sine');
             }, 260);
         }
 
         function stopBackgroundMusic() {
-            if (bgInterval) { clearInterval(bgInterval); bgInterval = null; }
+            if (bgInterval) {
+                clearInterval(bgInterval);
+                bgInterval = null;
+            }
         }
 
-        const GROUND_HEIGHT = 36;
-        const GROUND_Y = GROUND_HEIGHT;
-        const RUNNER_SIZE = 40;
-        const RUNNER_X = 80;
-
-        const GRAVITY = 2200;
-        const JUMP_VELOCITY = 700;
-        const MAX_JUMPS = 1;
-        const BASE_SPEED = 320;
-        const MAX_EXTRA_SPEED = 280;
-        const SCORE_TICK = 0.1;
-        const PERFECT_MIN_HEIGHT = 24;
-
-        const OBSTACLE_TYPES = [
-            { w: 26, h: 58, className: "normal" },
-            { w: 22, h: 46, className: "short" },
-            { w: 30, h: 52, className: "fat" },
-            { w: 24, h: 72, className: "tall" }
-        ];
-
-        let gameWidth = 660;
-        let lastTimestamp = null;
-        let state = 'menu';
-        let score = 0;
-        let scoreTimer = 0;
-        let bestScore = 0;
-        let perfectStreak = 0;
-        let bestStreakInRun = 0;
-        let lastRenderedScore = -1;
-
-        let runnerY = GROUND_Y;
-        let runnerVy = 0;
-        let jumpCount = 0;
-        let wasOnGround = true;
-        let runnerAngle = 0;
-        let groundX = 0;
-        let squashAmount = 0;
-        let squashDir = 1;
-
-        let obstacleX = -1000;
-        let obstacleWidth = 26;
-        let obstacleHeight = 58;
-        let obstaclePassed = false;
-        let jumpPeakHeight = 0;
-        let speed = BASE_SPEED;
-
-        (function loadSettings() {
-            try {
-                const storedTheme = localStorage.getItem('gree_runner_theme');
-                if (storedTheme && THEMES[storedTheme]) currentTheme = storedTheme;
-            } catch (e) { }
-            applyTheme(currentTheme);
-
-            try {
-                const soundPref = localStorage.getItem('gree_runner_sound');
-                if (soundPref === '0') soundOn = false;
-            } catch (e) { }
-            updateSoundLabel();
-
-            try {
-                const storedBest = localStorage.getItem('gree_runner_pro_best');
-                if (storedBest) {
-                    bestScore = parseInt(storedBest, 10) || 0;
-                    bestScoreEl.textContent = bestScore;
-                }
-            } catch (e) { }
-        })();
-
-        function setOverlay(title, subHtml, buttonLabel) {
+        function showOverlay(title, subHtml, buttonLabel) {
             overlayTitle.textContent = title;
             overlaySub.innerHTML = subHtml;
             playButton.textContent = buttonLabel;
+            overlay.classList.remove('hidden');
+            appFooter.classList.remove('hide-footer');
         }
 
-        function showFooter() { appFooter.classList.remove('hide-footer'); }
-        function hideFooter() {
+        function hideOverlay() {
+            overlay.classList.add('hidden');
             appFooter.classList.add('hide-footer');
             settingsPopup.classList.add('hidden');
+            const active = document.activeElement;
+            if (active && active !== gameArea && (appFooter.contains(active) || overlay.contains(active))) {
+                gameArea.focus({ preventScroll: true });
+            }
         }
 
-        function initPositions() {
-            gameWidth = gameArea.clientWidth || 660;
-            runnerY = GROUND_Y;
-            runnerVy = 0;
-            jumpCount = 0;
-            runnerAngle = 0;
-            updateDOM();
-            spawnNewObstacle(true);
+        function showCount(n) {
+            countdownEl.textContent = n;
+            restartAnimation(countdownEl, 'show');
         }
 
-        function spawnNewObstacle(initial = false) {
+        function hideCount() {
+            countdownEl.classList.remove('show');
+            countdownEl.textContent = '';
+        }
+
+        function triggerDust() {
+            dustEl.style.left = (RUNNER_X + RUNNER_SIZE * 0.3) + 'px';
+            restartAnimation(dustEl, 'show');
+        }
+
+        function checkMilestones() {
+            while (nextMilestone < MILESTONES.length && score >= MILESTONES[nextMilestone].score) {
+                milestoneEl.textContent = MILESTONES[nextMilestone].text;
+                restartAnimation(milestoneEl, 'show');
+                nextMilestone++;
+            }
+        }
+
+        function measureGame() {
+            gameWidth = gameArea.clientWidth || DEFAULT_GAME_WIDTH;
+        }
+
+        function spawnNewObstacle(initial) {
             const type = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)];
             obstacleWidth = type.w;
             obstacleHeight = type.h;
@@ -1031,29 +1104,26 @@
             const minTime = initial ? 1.5 : 1.1;
             const maxTime = initial ? 2.0 : 1.8;
             const gapTime = minTime + Math.random() * (maxTime - minTime);
-            obstacleX = gameWidth + (speed * gapTime);
-            obstaclePassed = false;
-            jumpPeakHeight = 0;
+            obstacleX = gameWidth + speed * gapTime;
         }
 
         function resetRun() {
             score = 0;
             scoreTimer = 0;
-            perfectStreak = 0;
-            bestStreakInRun = 0;
             lastRenderedScore = -1;
-            milestonesShown.clear();
+            nextMilestone = 0;
             scoreEl.textContent = '0';
             speed = BASE_SPEED;
+
             runnerY = GROUND_Y;
             runnerVy = 0;
-            jumpCount = 0;
             runnerAngle = 0;
-            groundX = 0;
+            jumpCount = 0;
             wasOnGround = true;
-            jumpPeakHeight = 0;
             squashAmount = 0;
             squashDir = 1;
+            groundX = 0;
+
             spawnNewObstacle(true);
             updateDOM();
         }
@@ -1061,113 +1131,160 @@
         function startGame() {
             state = 'playing';
             lastTimestamp = null;
-            overlay.classList.add('hidden');
-            hideFooter();
+            hideOverlay();
             resetRun();
             startBackgroundMusic();
         }
 
-        function togglePause() {
-            if (state === 'playing') {
+        function showPausedOverlay() {
+            showOverlay('Paused', 'Take a breath, then jump back in.', 'Resume');
+        }
+
+        function pauseGame(silent = false) {
+            if (state === 'countdown') {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+                hideCount();
                 state = 'paused';
-                setOverlay('Paused', 'Game paused! Take a breath and resume your endless run.', 'Resume');
-                overlay.classList.remove('hidden');
-                showFooter();
-                stopBackgroundMusic();
-                playPauseSound();
-            } else if (state === 'paused') {
+                showPausedOverlay();
+                return;
+            }
+            if (state !== 'playing') return;
+
+            state = 'paused';
+            showPausedOverlay();
+            stopBackgroundMusic();
+            if (!silent) playPauseSound();
+        }
+
+        function beginResume() {
+            if (state !== 'paused') return;
+
+            state = 'countdown';
+            hideOverlay();
+
+            let n = 3;
+            showCount(n);
+            countdownTimer = setInterval(() => {
+                n--;
+                if (n > 0) {
+                    showCount(n);
+                    return;
+                }
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+                hideCount();
                 state = 'playing';
                 lastTimestamp = null;
-                overlay.classList.add('hidden');
-                hideFooter();
                 startBackgroundMusic();
-                playPauseSound();
-            }
+            }, COUNTDOWN_STEP_MS);
+        }
+
+        function togglePause() {
+            if (state === 'playing' || state === 'countdown') pauseGame();
+            else if (state === 'paused') beginResume();
         }
 
         function endGame() {
             state = 'gameover';
-            const finalScore = Math.floor(score);
-            if (finalScore > bestScore) {
-                bestScore = finalScore;
+
+            const isNewBest = score > bestScore;
+            if (isNewBest) {
+                bestScore = score;
                 bestScoreEl.textContent = bestScore;
-                try { localStorage.setItem('gree_runner_pro_best', bestScore); } catch (e) { }
+                writeStorage(STORAGE_KEYS.best, bestScore);
             }
 
-            setOverlay(
+            const message = isNewBest
+                ? 'New high score! Can you top it?'
+                : 'Give it another go and beat your best.';
+
+            showOverlay(
                 'Game Over',
-                `Score: <b style="color: var(--accent);">${finalScore}</b> &nbsp;|&nbsp; Streak: <b style="color: var(--accent);">${bestStreakInRun}</b><br>Great effort! Push your limits and beat this new score.`,
+                `Score: <b class="highlight">${score}</b> | Best: <b class="highlight">${bestScore}</b><br>${message}`,
                 'Play Again'
             );
-
-            overlay.classList.remove('hidden');
-            showFooter();
             stopBackgroundMusic();
             playGameOverSound();
         }
 
-        function triggerDust() {
-            dustEl.classList.remove('show');
-            void dustEl.offsetWidth;
-            dustEl.style.left = (RUNNER_X + RUNNER_SIZE * 0.3) + 'px';
-            dustEl.classList.add('show');
-        }
-
-        const milestonesShown = new Set();
-        function checkMilestones(intScore) {
-            const important = [100, 200, 500, 800, 1200];
-            for (const m of important) {
-                if (intScore >= m && !milestonesShown.has(m)) {
-                    milestonesShown.add(m);
-                    showMilestone(m);
-                }
-            }
-        }
-
-        function showMilestone(m) {
-            let text = '';
-            if (m === 100) text = 'Nice warm up!';
-            else if (m === 200) text = 'Getting in the flow!';
-            else if (m === 500) text = 'You are on fire!';
-            else if (m === 800) text = 'Unstoppable!';
-            else text = 'Legend!';
-
-            milestoneEl.textContent = text;
-            milestoneEl.classList.remove('show');
-            void milestoneEl.offsetWidth;
-            milestoneEl.classList.add('show');
-        }
-
         function jump() {
-            if (state !== 'playing') return;
+            if (state !== 'playing' || jumpCount >= MAX_JUMPS) return;
 
-            if (jumpCount < MAX_JUMPS) {
-                runnerVy = JUMP_VELOCITY;
-                jumpCount++;
-                runnerAngle = 0;
-                squashAmount = 1;
-                squashDir = 1;
-                playJumpSound();
-            }
+            runnerVy = JUMP_VELOCITY;
+            jumpCount++;
+            runnerAngle = 0;
+            squashAmount = 1;
+            squashDir = 1;
+            playJumpSound();
         }
 
         function hasCollision() {
-            const rLeft = RUNNER_X, rRight = RUNNER_X + RUNNER_SIZE;
-            const rBot = runnerY, rTop = runnerY + RUNNER_SIZE;
-            const oLeft = obstacleX + 4, oRight = obstacleX + obstacleWidth - 4;
-            const oBot = GROUND_Y, oTop = GROUND_Y + obstacleHeight - 4;
+            const runnerLeft = RUNNER_X;
+            const runnerRight = RUNNER_X + RUNNER_SIZE;
+            const runnerBottom = runnerY;
+            const runnerTop = runnerY + RUNNER_SIZE;
 
-            return (rRight > oLeft && rLeft < oRight) &&
-                (rTop > oBot && rBot < oTop);
+            const obstacleLeft = obstacleX + 4;
+            const obstacleRight = obstacleX + obstacleWidth - 4;
+            const obstacleBottom = GROUND_Y;
+            const obstacleTop = GROUND_Y + obstacleHeight - 4;
+
+            return runnerRight > obstacleLeft && runnerLeft < obstacleRight &&
+                runnerTop > obstacleBottom && runnerBottom < obstacleTop;
         }
 
         function updateDOM() {
             groundEl.style.transform = `skewX(-45deg) translate3d(${Math.round(groundX)}px, 0, 0)`;
-            runnerWrap.style.transform = `translate3d(0, -${runnerY - GROUND_Y}px, 0)`;
+            runnerWrap.style.transform = `translate3d(0, ${GROUND_Y - runnerY}px, 0)`;
+
             const scaleY = 1 + squashDir * squashAmount * 0.22;
             const scaleX = 1 - squashDir * squashAmount * 0.16;
             runnerEl.style.transform = `rotate(${runnerAngle}deg) scale(${scaleX}, ${scaleY})`;
+
             obstacleEl.style.transform = `translate3d(${obstacleX}px, 0, 0)`;
+        }
+
+        function update(dt) {
+            runnerVy -= GRAVITY * dt;
+            runnerY += runnerVy * dt;
+
+            const onGround = runnerY <= GROUND_Y;
+            if (onGround) {
+                if (!wasOnGround) {
+                    triggerDust();
+                    squashAmount = 1;
+                    squashDir = -1;
+                }
+                runnerY = GROUND_Y;
+                runnerVy = 0;
+                runnerAngle = 0;
+                jumpCount = 0;
+            } else {
+                runnerAngle += SPIN_SPEED * dt;
+            }
+            wasOnGround = onGround;
+
+            squashAmount = Math.max(0, squashAmount - dt * 6.5);
+
+            groundX = (groundX - speed * dt) % GROUND_PERIOD;
+            obstacleX -= speed * dt;
+            if (obstacleX + obstacleWidth < -40) spawnNewObstacle(false);
+
+            scoreTimer += dt;
+            while (scoreTimer >= SCORE_TICK) {
+                score++;
+                scoreTimer -= SCORE_TICK;
+            }
+            if (score !== lastRenderedScore) {
+                lastRenderedScore = score;
+                scoreEl.textContent = score;
+                checkMilestones();
+            }
+
+            speed = BASE_SPEED + Math.sqrt(score) * SPEED_RAMP;
+
+            if (hasCollision()) endGame();
         }
 
         function loop(timestamp) {
@@ -1176,173 +1293,120 @@
             lastTimestamp = timestamp;
 
             if (state === 'playing') {
-                runnerVy -= GRAVITY * dt;
-                runnerY += runnerVy * dt;
-
-                const onGround = runnerY <= GROUND_Y;
-                if (onGround) {
-                    if (!wasOnGround) {
-                        triggerDust();
-                        squashAmount = 1;
-                        squashDir = -1;
-                    }
-                    runnerY = GROUND_Y;
-                    runnerVy = 0;
-                    jumpCount = 0;
-                    runnerAngle = 0;
-                } else {
-                    runnerAngle += 900 * dt;
-                }
-                wasOnGround = onGround;
-
-                squashAmount = Math.max(0, squashAmount - dt * 6.5);
-
-                const heightAboveGround = runnerY - GROUND_Y;
-                if (heightAboveGround > jumpPeakHeight) jumpPeakHeight = heightAboveGround;
-
-                groundX -= speed * dt;
-                groundX %= 48;
-
-                obstacleX -= speed * dt;
-
-                if (!obstaclePassed && obstacleX + obstacleWidth < RUNNER_X) {
-                    obstaclePassed = true;
-                    if (jumpPeakHeight > PERFECT_MIN_HEIGHT) {
-                        perfectStreak++;
-                        if (perfectStreak > bestStreakInRun) bestStreakInRun = perfectStreak;
-                        score += 10 * perfectStreak;
-                        playPerfectSound();
-                    } else {
-                        perfectStreak = 0;
-                    }
-                }
-
-                if (obstacleX + obstacleWidth < -40) spawnNewObstacle(false);
-
-                scoreTimer += dt;
-                while (scoreTimer >= SCORE_TICK) { score += 1; scoreTimer -= SCORE_TICK; }
-
-                const intScore = Math.floor(score);
-                if (intScore !== lastRenderedScore) {
-                    scoreEl.textContent = intScore;
-                    checkMilestones(intScore);
-                    lastRenderedScore = intScore;
-                }
-
-                speed = BASE_SPEED + Math.min((intScore / 100) * 18, MAX_EXTRA_SPEED);
-
-                if (hasCollision()) endGame();
+                const steps = Math.max(1, Math.ceil(dt / MAX_STEP));
+                const h = dt / steps;
+                for (let i = 0; i < steps && state === 'playing'; i++) update(h);
             }
 
             updateDOM();
             requestAnimationFrame(loop);
         }
 
-        document.addEventListener('keydown', (event) => {
-            if (event.code === 'Space' || event.code === 'ArrowUp') {
-                event.preventDefault();
-                if (state === 'playing') jump();
-            } else if (event.code === 'Enter') {
-                event.preventDefault();
-                if (state === 'gameover' || state === 'menu') startGame();
-                else if (state === 'paused') togglePause();
-            } else if (event.code === 'KeyP') {
-                if (state === 'playing' || state === 'paused') togglePause();
-            } else if (event.code === 'KeyM') {
-                toggleSoundLogic();
-            }
-        });
-
-        function toggleSoundLogic() {
-            soundOn = !soundOn;
-            if (soundOn) {
-                initAudio();
-                if (state === 'playing') startBackgroundMusic();
-            } else {
-                stopBackgroundMusic();
-            }
-            updateSoundLabel();
+        function refocusGame(e) {
+            e.currentTarget.blur();
+            gameArea.focus();
         }
 
-        gameArea.addEventListener('mousedown', (e) => {
-            if (state === 'playing') {
-                e.preventDefault();
-                jump();
-                gameArea.focus();
+        function handlePointerJump(e) {
+            if (state !== 'playing') return;
+            if (e.type === 'mousedown' && e.button !== 0) return;
+            e.preventDefault();
+            jump();
+            gameArea.focus();
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey || event.metaKey || event.altKey) return;
+            const onButton = event.target instanceof Element && event.target.closest('button');
+
+            switch (event.code) {
+                case 'Space':
+                case 'ArrowUp':
+                    if (event.code === 'Space' && onButton) break;
+                    event.preventDefault();
+                    if (!event.repeat) jump();
+                    break;
+                case 'Enter':
+                    if (onButton) break;
+                    event.preventDefault();
+                    if (event.repeat) break;
+                    if (state === 'gameover' || state === 'menu') startGame();
+                    else if (state === 'paused') togglePause();
+                    break;
+                case 'KeyP':
+                    if (!event.repeat) togglePause();
+                    break;
+                case 'KeyM':
+                    if (!event.repeat) toggleSound();
+                    break;
             }
         });
 
-        gameArea.addEventListener('touchstart', (e) => {
-            if (state === 'playing') {
-                e.preventDefault();
-                jump();
-                gameArea.focus();
-            }
-        }, { passive: false });
+        gameArea.addEventListener('mousedown', handlePointerJump);
+        gameArea.addEventListener('touchstart', handlePointerJump, { passive: false });
 
         playButton.addEventListener('click', (e) => {
             if (soundOn) initAudio();
             if (state === 'paused') togglePause();
-            else startGame();
-            e.target.blur();
-            gameArea.focus();
+            else if (state === 'menu' || state === 'gameover') startGame();
+            refocusGame(e);
         });
 
-        themeButtons.forEach(btn => btn.addEventListener('click', (e) => {
-            applyTheme(btn.dataset.theme);
-            e.target.blur();
-        }));
+        themeButtons.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                applyTheme(btn.dataset.theme);
+                e.currentTarget.blur();
+            });
+        });
 
         settingsToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             settingsPopup.classList.toggle('hidden');
-            e.currentTarget.blur();
-            gameArea.focus();
+            refocusGame(e);
         });
 
-        soundLabelBtn.addEventListener('click', (e) => {
+        soundSwitch.addEventListener('click', (e) => {
             e.stopPropagation();
-            toggleSoundLogic();
-            e.currentTarget.blur();
-            gameArea.focus();
+            toggleSound();
+            refocusGame(e);
         });
 
         shortcutsToggleBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            shortcutsList.classList.toggle('open');
-            shortcutsArrow.classList.toggle('open');
-            e.currentTarget.blur();
-            gameArea.focus();
+            const isOpen = shortcutsList.classList.toggle('open');
+            shortcutsArrow.classList.toggle('open', isOpen);
+            shortcutsToggleBtn.setAttribute('aria-expanded', String(isOpen));
+            refocusGame(e);
         });
 
         document.addEventListener('click', (e) => {
-            if (!settingsPopup.contains(e.target) && !settingsToggle.contains(e.target)) {
-                settingsPopup.classList.add('hidden');
-                shortcutsList.classList.remove('open');
-                shortcutsArrow.classList.remove('open');
-            }
+            if (settingsPopup.contains(e.target) || settingsToggle.contains(e.target)) return;
+            settingsPopup.classList.add('hidden');
+            shortcutsList.classList.remove('open');
+            shortcutsArrow.classList.remove('open');
+            shortcutsToggleBtn.setAttribute('aria-expanded', 'false');
         });
 
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) pauseGame(true);
+        });
+
+        window.addEventListener('blur', () => pauseGame(true));
+
         window.addEventListener('resize', () => {
-            gameWidth = gameArea.clientWidth || 660;
+            measureGame();
             if (obstacleX > gameWidth + 200) obstacleX = gameWidth + 120;
         });
 
-        (function init() {
-            state = 'menu';
-            setOverlay('Gree Runner', 'Get ready! Avoid obstacles and chase a new high score.', 'Start Game');
-            overlay.classList.remove('hidden');
-            showFooter();
-            initPositions();
-            applyTheme(currentTheme);
-            requestAnimationFrame(loop);
-        })();
+        loadSettings();
+        measureGame();
+        resetRun();
+        showOverlay('Gree Runner', 'Jump over obstacles and chase a new high score.', 'Start Game');
+        requestAnimationFrame(loop);
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('PWA Service Worker Registered!'))
-                    .catch(err => console.log('Service Worker Registration Failed:', err));
+                navigator.serviceWorker.register('./sw.js').catch(() => { });
             });
         }
     </script>

@@ -1,36 +1,50 @@
-const CACHE_NAME = 'gree-runner-cache-v2';
+const CACHE_NAME = 'gree-runner-cache-v3';
 const ASSETS = [
+  './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
 ];
 
-self.addEventListener('install', (e) => {
+self.addEventListener('install', (event) => {
   self.skipWaiting();
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      );
-    }).then(() => self.clients.claim())
-  );
-});
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET' || !request.url.startsWith(self.location.origin)) return;
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
-    })
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        if (response.status === 200) {
+          const copy = response.clone();
+          event.waitUntil(
+            caches.open(CACHE_NAME)
+              .then((cache) => cache.put(request, copy))
+              .catch(() => { })
+          );
+        }
+        return response;
+      })
+      .catch(() =>
+        caches.match(request, { ignoreSearch: true }).then((cached) => {
+          if (cached) return cached;
+          if (request.mode === 'navigate') return caches.match('./index.html');
+          return Response.error();
+        })
+      )
   );
 });
